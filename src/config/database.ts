@@ -1,43 +1,44 @@
-import assert from 'assert'
-import {config} from 'dotenv'
-import sql from 'mssql'
-config()
+import sql from 'mssql';
+import dotenv from 'dotenv';
+dotenv.config();
 
-assert(process.env.SQL_PWD,"Please provide server password")
-assert(process.env.SQL_DB,"Proide database name")
-assert(process.env.SQL_SERVER,"Provide server name")
-assert(process.env.SQL_USER,"Provide user name")
-assert(process.env.SQL_PORT,"Provide sql port")
+let pool: sql.ConnectionPool | null = null;
 
-
-export const sqlConfigurations={
-    port:process.env.SQL_PORT,
-    sqlconfig:{
-        password:process.env.SQL_PWD,
-        user:process.env.SQL_USER,
-        server:process.env.SQL_SERVER,
-        database:process.env.SQL_DB,
-       pool:{
-        max:10,
-        min:0,
-         idleTimeoutMillis: 30000
-       },
-    options: {
-        encrypt: true,
-        trustServerCertificate: true
+export async function getDbConnection(): Promise<sql.ConnectionPool> {
+    if (pool && pool.connected) {
+        return pool;
     }
-    },
-
-}
-
-
-export const getPool=async()=>{
     try {
-        const pool =await sql.connect(sqlConfigurations.sqlconfig)
-        return pool
-    } catch (error:any) {
-        console.log("Error connecting to the db")
-        throw  error
+        pool = new sql.ConnectionPool({
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            server: process.env.DB_SERVER || 'localhost',
+            database: process.env.DB_NAME,
+            port: parseInt(process.env.DB_PORT || '1433'),
+            pool: {
+                max: 10,
+                min: 0,
+                idleTimeoutMillis: 30000
+            },
+            options: {
+                encrypt: false,
+                trustServerCertificate: true
+            }
+        });
+        await pool.connect();
+        console.log('Database connection established');
+        return pool;
+    } catch (error) {
+        console.error('Database connection error:', error);
+        throw new Error('Failed to connect to database');
     }
 }
 
+// Optional: Close pool on server shutdown
+export async function closeDbConnection(): Promise<void> {
+    if (pool && pool.connected) {
+        await pool.close();
+        pool = null;
+        console.log('Database connection closed');
+    }
+}
