@@ -39,7 +39,7 @@ export const config ={
     }
 }
 
-export const getpool = async () => {
+export const getPool = async () => {
     try {
         const pool = await sql.connect(config.sqlConfig)
         return pool;
