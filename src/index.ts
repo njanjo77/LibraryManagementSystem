@@ -1,7 +1,5 @@
 
 import  express from "express";
-import { config } from "dotenv";
-import { Request,Response } from "express";
 import { getPool } from "./config/database.js";
 const app = express()
 app.use(express.json())
@@ -14,9 +12,16 @@ const port = 8081
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
 })
+const pool= getPool()
+pool.then(pool=>{
+    console.log("Database Connected Successfully")
+})
+.catch(err=>{
+    console.log("Failed to connect to DB",err)
+})
 
-await getPool().then(()=>{console.log("Connected to db Successfully")})
-.catch((err)=>{console.log("Failed to connect to db.")})
+
+
 
 
 
