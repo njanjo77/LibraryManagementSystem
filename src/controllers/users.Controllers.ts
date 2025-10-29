@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import * as userServices from "../services/users.Service";
 import hashPassword from "../Utils/hashPassword.utils";
-
+import getDate from "../Utils/generateDate.utils";
+import { validateEmail } from "../Utils/validateEmail.utils";
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -150,17 +151,35 @@ export const createUser = async (req: Request, res: Response) => {
         message: "Missing required user fields",
       });
     }
+    //checking the user with the same email exists
+    const existingUser = await userServices.getUserByEmail(userData.email);
+    if (existingUser) {
+      return res
+        .status(409)
+        .json({ success: false, message: "User with this email already exists" });
+    } else {
 
-    const password=hashPassword(userData.password)
-   //overwriting user.password
-    userData.password=password;
-    const newUser = await userServices.insertUser(userData);
+      //validate user email.
+      const valid_email=validateEmail(userData.email)
+      if(!valid_email){
+        return res
+        .status(400)
+        .json({success:false,message:"Invalid email"})
+      }
+      const password = await hashPassword(userData.password);
+      const created = await getDate();
 
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      data: newUser,
-    });
+      userData.created_at = created;
+      userData.password = password;
+
+      const newUser = await userServices.insertUser(userData);
+      console.log(newUser);
+      res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        data: newUser,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -171,8 +190,9 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const userId = Number(req.params.user_id);
-
+    const userId = parseInt(req.params.id)
+    
+     console.log(userId)
     if (isNaN(userId)) {
       return res.status(400).json({
         success: false,
@@ -193,8 +213,6 @@ export const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
-
-
 
 export const getUserByEmail = async (req: Request, res: Response) => {
   try {
