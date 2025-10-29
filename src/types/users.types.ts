@@ -2,7 +2,7 @@ export interface User{
     user_id:number,
     username: string,
     email: string,
-    password_hash:string,
+    password:string,
     role: string,
     created_at?: Date ,
     updated_at?: Date
@@ -11,14 +11,14 @@ export interface User{
 export interface newUser{
     username:string,
     email:string,
-    password_hash:string,
+    password:string,
     role:string,
     created_at?:Date,
 }
 
 export interface updateUser{
     username?:string,
-    password_hash?:string,
+    password?:string,
     role?:string,
     updated_at?:Date
 }
