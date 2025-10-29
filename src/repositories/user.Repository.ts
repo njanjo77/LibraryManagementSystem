@@ -117,16 +117,17 @@ export const getUserById = async (user_id: number): Promise<User | null> => {
 export const insertUser = async (user: newUser): Promise<void> => {
   try {
     const pool = await getPool();
+    
     await pool
       .request()
       .input("username", user.username)
       .input("email", user.email)
-      .input("password_hash", user.password)
+      .input("password", user.password)
       .input("role", user.role)
       .input("date", user.created_at)
       .query(`
-        INSERT INTO Users (username, email, password_hash, role, date)
-        VALUES (@username, @email, @password_hash, @role, @date)
+        INSERT INTO Users (username, email, password_hash, role, created_at)
+        VALUES (@username, @email, @password, @role, @date)
       `);
      const newUser=await pool.request().input("email",user.email).query("SELECT * FROM Users WHERE email=@email ")
      return newUser.recordset[0]
