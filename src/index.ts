@@ -1,8 +1,12 @@
-
 import  express from "express";
-import { getpool } from './config/database';
-
+import { getPool } from "./config/database.js";
+import userRouter from "./router/user.routes.js";
+import borrowRouter from "./router/borrowrecords.Routes.js";
 const app = express()
+app.use(express.json())
+
+app.use("/api",userRouter)
+app.use("/api",borrowRouter)
 
 app.get("/", (req, res) => {
     res.send("Hello, the express server is running")
@@ -12,19 +16,20 @@ const port = 8081
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
 })
-app.get("/borrowrecords", (req, res) => {
-    getpool().then(pool => {
-        return pool.request()
-            .query('SELECT * FROM BorrowRecords')
-    }).then(result => {
-        console.log("Borrow records fetched successfully");
-        res.json(result.recordset)
-    }).catch((err: any) => {
-        console.error("Error fetching borrow records", err)
-        res.status(500).send("Internal Server Error")
-    })
+const pool= getPool()
+pool.then(pool=>{
+    console.log("Database Connected Successfully")
+})
+.catch(err=>{
+    console.log("Failed to connect to DB",err)
 })
 
-getpool()
-.then(() => console.log("Database connected successfully"))
-.catch((err: any) => console.error("Database connection failed", err))
+
+
+
+
+
+
+
+
+

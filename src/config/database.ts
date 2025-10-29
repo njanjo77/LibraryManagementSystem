@@ -11,17 +11,17 @@ const {
     SQL_DB,
     SQL_USER,
     SQL_PWD,
-    PORT,
+    SQL_PORT,
 }= process.env;
 
-assert(PORT, 'PORT is required');
+assert(SQL_PORT, 'PORT is required');
 assert(SQL_SERVER, 'SQL_SERVER is required');
 assert(SQL_DB, 'SQL_DB is required');
 assert(SQL_USER, 'SQL_USER is required');
 assert(SQL_PWD, 'SQL_PWD is required');
 
 export const config ={
-    port:PORT,
+    port:SQL_PORT,
     sqlConfig: {
         user: SQL_USER,
         password: SQL_PWD,
@@ -39,7 +39,7 @@ export const config ={
     }
 }
 
-export const getpool = async () => {
+export const getPool = async () => {
     try {
         const pool = await sql.connect(config.sqlConfig)
         return pool;
