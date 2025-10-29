@@ -1,6 +1,5 @@
-import * as userRepository from '../repositories/users.Repository'
+import * as userRepository from '../repositories/user.Repository'
 import { newUser } from '../types/users.types'
-
 
 export const getAdmins=async()=>{
  const admins=await userRepository.getAdmins()
@@ -12,7 +11,7 @@ export const getAdminById=async(admin_id:number)=>{
     return admin
 }
 
-export const getUser=async()=>{
+export const getUsers=async()=>{
     const users=await userRepository.getUsers()
     return users
 }
