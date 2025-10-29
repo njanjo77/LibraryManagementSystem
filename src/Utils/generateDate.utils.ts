@@ -1,4 +1,4 @@
- const getDate=async()=>{
+ const getDate=async():Promise<string>=>{
   const now = new Date();
 
   const yyyy = now.getFullYear();
