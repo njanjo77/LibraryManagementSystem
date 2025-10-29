@@ -11,7 +11,7 @@ export interface User{
 export interface newUser{
     username:string,
     email:string,
-    password_:string,
+    password:string,
     role:string,
     created_at?:Date,
 }

@@ -1,4 +1,4 @@
-import * as userRepository from '../repositories/users.repository'
+import * as userRepository from '../repositories/users.Repository'
 import { newUser } from '../types/users.types'
 
 
