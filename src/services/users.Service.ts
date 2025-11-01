@@ -53,37 +53,48 @@ export const insertUser=async(user:newUser)=>{
     }
 }
 
-export const loginUser=async(user:existingUser)=>{
-    try {
-        const existingUser=await userRepository.loginUser(user)
-        if(!existingUser){
-            return {success:false,message:"User doesn't exist, signup"}
-        }
-        const matchPassword=bcrypt.compare(user.password,existingUser[0].password)
-        if(!matchPassword){
-            return {success:false,message:"Wrong Password"}
-        }
-        const secret=process.env.JWT_SECRET  as string
-        const expires=process.env.JWT_EXPIRES as string
-        const payload={
-            id:existingUser[0].user_id,
-            username:existingUser[0].username,
-            role:existingUser[0].role,
-            created:existingUser[0].created_at,
-            updated:existingUser[0].updated_at
-        } 
-        const token=jwt.sign(payload,secret,{expiresIn:'1h'})
+export const loginUser = async (userData: existingUser) => {
+  try {
+    const foundUser = await userRepository.loginUser(userData);
 
-        if(!token){
-            return {success:false,messaeg:"Try Again"}
-        }
-        const payloadWithToken={...payload,token}
-        return {success:true,message:"Logged in successfully",data:payloadWithToken}
-
-    } catch (error) {
-        throw error
+    if (!foundUser || foundUser.length === 0) {
+      return { success: false, message: "User doesn't exist, signup" };
     }
-}
+    const storedHash = foundUser[0].password_hash;
+    console.log(userData.password)
+    console.log(foundUser)
+    if (!userData.password || !storedHash) {
+      return { success: false, message: "Missing password data" };
+    }
+    const matchPassword = await bcrypt.compare(userData.password, storedHash);
+    if (!matchPassword) {
+      return { success: false, message: "Wrong Password" };
+    }
+
+    const secret = process.env.JWT_SECRET as string;
+    const payload = {
+      id: foundUser[0].user_id,
+      username: foundUser[0].username,
+      role: foundUser[0].role,
+      created: foundUser[0].created_at,
+      updated: foundUser[0].updated_at,
+    };
+
+    const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+
+    if (!token) {
+      return { success: false, message: "Try Again" };
+    }
+
+    const payloadWithToken = { ...payload, token };
+    return { success: true, message: "Logged in successfully", data: payloadWithToken };
+
+  } catch (error) {
+    console.error("Error in loginUser:", error);
+    throw error;
+  }
+};
+
 export const deleteUser=async(user_id:number)=>{
    await userRepository.deleteUser(user_id)
 }

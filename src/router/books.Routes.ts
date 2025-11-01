@@ -1,15 +1,16 @@
 import { Router } from 'express';
 import * as BookController from '../controllers/books.Controllers.js';  
+import { isAuthenticated } from '../Middlewares/bearAuth.js';
 //import { authenticateJWT } from '../middleware/auth';
 //import { authorizeRole } from '../middleware/role';
 
 const router = Router();
 
-router.get('/', BookController.getAllBooks);
-router.get('/:id', BookController.getBookById);
+router.get('/',isAuthenticated, BookController.getAllBooks);
+router.get('/:id',isAuthenticated, BookController.getBookById);
 //odari take note of these routes below to be protected, in admin role
-router.post('/',BookController.createBook);
-router.put('/:id',BookController.updateBook);
-router.delete('/:id',BookController.deleteBook);
+router.post('/',isAuthenticated,BookController.createBook);
+router.put('/:id',isAuthenticated,BookController.updateBook);
+router.delete('/:id',isAuthenticated,BookController.deleteBook);
 
 export default router;

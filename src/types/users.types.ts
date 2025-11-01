@@ -3,6 +3,7 @@ export interface User{
     username: string,
     email: string,
     password:string,
+    password_hash?:string,
     role: 'Admin' | 'Member',
     created_at?: Date,
     updated_at?: Date
@@ -26,7 +27,8 @@ export interface updateUser{
 
 export interface existingUser{
     email:string,
-    password:string
+    password:string,
+    password_hash?:string
 }
 
 export interface loginJwtConfig{
