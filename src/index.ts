@@ -10,6 +10,8 @@ app.use(express.json())
 
 app.use("/api",userRouter)
 app.use("/api",borrowRouter)
+app.use('/api/categories', categoriesRouter);
+app.use('/api/books', booksRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello, the express server is running")
@@ -17,8 +19,6 @@ app.get("/", (req, res) => {
 
 app.get("/", (req, res) => {res.send("Hello, the express server is running")})
 //load routes
-app.use('/api/categories', categoriesRouter);
-app.use('/api/books', booksRouter);
 
 const port = 3000
 app.listen(port, () => {
