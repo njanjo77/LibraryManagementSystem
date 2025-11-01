@@ -3,7 +3,8 @@ import { getPool } from "./config/database.js";
 import userRouter from "./router/user.routes.js";
 import borrowRouter from "./router/borrowrecords.Routes.js";
 import categoriesRouter from './router/categories.Routes.js';
-import booksRouter from './router/books.Routes.js'
+import booksRouter from './router/books.Routes.js';
+import commentsRouter from './router/comments.Routes.js';
 
 const app = express()
 app.use(express.json())
@@ -12,6 +13,7 @@ app.use("/api",userRouter)
 app.use("/api",borrowRouter)
 app.use('/api/categories', categoriesRouter);
 app.use('/api/books', booksRouter);
+app.use('/api', commentsRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello, the express server is running")
