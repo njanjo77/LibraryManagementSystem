@@ -18,6 +18,7 @@ A comprehensive library management software built with Node.js, Express, and SQL
 - **Database**: SQL Server (MSSQL)
 - **Language**: TypeScript
 - **Package Manager**: pnpm
+- **Development Tool**: tsx for hot reload
 
 ## Prerequisites
 
@@ -67,7 +68,7 @@ Build and start the production server:
 pnpm run start
 ```
 
-The server will start on `http://localhost:8081`
+The server will start on `http://localhost:3000`
 
 ## API Endpoints
 
@@ -75,23 +76,41 @@ The server will start on `http://localhost:8081`
 - `GET /api/users` - Get all users
 - `GET /api/users/admins` - Get all administrators
 - `GET /api/users/admin/:admin_id` - Get admin by ID
-- `GET /api/users/admin/` - Get user by email
+- `GET /api/users/admin` - Get user by email
 - `GET /api/users/members` - Get all members
 - `GET /api/users/member/:member_id` - Get member by ID
-- `POST /api/users/create/` - Create a new user
+- `POST /api/users/create` - Create a new user
+- `POST /api/users/login` - Login user
 - `DELETE /api/users/delete/:id` - Delete a user
 
 ### Books
-- Additional endpoints for book management
+- `GET /api/books` - Get all books
+- `GET /api/books/:id` - Get book by ID
+- `POST /api/books` - Create a new book
+- `PUT /api/books/:id` - Update a book
+- `DELETE /api/books/:id` - Delete a book
 
 ### Borrow Records
-- Endpoints for managing borrowing transactions
+- `GET /api/borrow-records` - Get all borrow records
+- `GET /api/borrow-records/:borrow_id` - Get borrow record by ID
+- `POST /api/borrow-records/create` - Create a new borrow record
+- `PUT /api/borrow-records/update/:borrow_id` - Update a borrow record
+- `PATCH /api/borrow-records/clear/:borrow_id` - Clear a borrow record
+- `DELETE /api/borrow-records/delete/:borrow_id` - Delete a borrow record
 
 ### Categories
-- Endpoints for book categories
+- `GET /api/categories` - Get all categories
+- `GET /api/categories/:id` - Get category by ID
+- `POST /api/categories` - Create a new category
+- `PUT /api/categories/:id` - Update a category
+- `DELETE /api/categories/:id` - Delete a category
 
 ### Comments
-- Endpoints for book comments
+- `GET /api/comments` - Get all comments
+- `GET /api/comments/:id` - Get comment by ID
+- `POST /api/comments/create` - Create a new comment
+- `PUT /api/comments/:id` - Update a comment
+- `DELETE /api/comments/:id` - Delete a comment
 
 ## Project Structure
 
@@ -106,6 +125,7 @@ src/
 ├── services/                # Business logic
 ├── types/                   # TypeScript interfaces
 ├── Utils/                   # Utility functions
+├── Middlewares/             # Middleware functions
 └── index.ts                 # Application entry point
 ```
 
