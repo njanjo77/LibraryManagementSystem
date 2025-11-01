@@ -20,6 +20,7 @@ A comprehensive library management software built with Node.js, Express, and SQL
 - **Language**: TypeScript
 - **Package Manager**: pnpm
 - **Development Tool**: tsx for hot reload
+- **Authentication**: JWT (jsonwebtoken) with bcrypt for password hashing
 
 ## Prerequisites
 
@@ -67,6 +68,7 @@ pnpm run dev
 
 Build and start the production server:
 ```bash
+pnpm run build
 pnpm run start
 ```
 
@@ -135,7 +137,7 @@ src/
 ├── services/                # Business logic
 ├── types/                   # TypeScript interfaces
 ├── Utils/                   # Utility functions
-├── Middlewares/             # Middleware functions
+├── Middlewares/             # Authentication and validation middleware
 └── index.ts                 # Application entry point
 ```
 
