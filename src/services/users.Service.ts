@@ -8,30 +8,43 @@ import jwt, { Secret } from 'jsonwebtoken'
 
 export const getAdmins=async()=>{
  const admins=await userRepository.getAdmins()
+ admins.forEach(admin=>{
+  delete admin?.password_hash
+ })
  return admins
 }
 
 export const getAdminById=async(admin_id:number)=>{
     const admin=await userRepository.getAdminById(admin_id)
+    delete admin?.password_hash
     return admin
 }
 
 export const getUsers=async()=>{
     const users=await userRepository.getUsers()
+    users.forEach(user=>{
+    delete user?.password_hash
+    })
     return users
 }
 export const getMembers=async()=>{
     const members=await userRepository.getMembers()
+    members.forEach(member=>{
+       delete member?.password_hash
+    })
     return members
+
 }
 
 export const getMemberId=async(member_id:number)=>{
     const member=await userRepository.getMemberId(member_id)
+    delete member?.password_hash
     return member
 }
 export const getUserByEmail=async(user_email:string)=>{
-    const users=await userRepository.getUserByEmail(user_email)
-    return users
+    const user=await userRepository.getUserByEmail(user_email)
+    delete user?.password_hash
+    return user
 }
 
 export const insertUser=async(user:newUser)=>{
@@ -42,8 +55,11 @@ export const insertUser=async(user:newUser)=>{
             const hashed= await hashPassword(user.password)
             user.created_at=new Date(created)
             user.password=hashed
-            const registerUser=await userRepository.insertUser(user)
-            return {registerUser}
+            const registeredUser=await userRepository.insertUser(user)
+            registeredUser?.forEach(user=>{
+              delete user.password_hash
+            })
+            return {registeredUser}
         }
         else{
             return {success:false,Message:"User already exists"}
@@ -98,3 +114,11 @@ export const loginUser = async (userData: existingUser) => {
 export const deleteUser=async(user_id:number)=>{
    await userRepository.deleteUser(user_id)
 }
+
+// export const deleteKey = (objectData: User[], key: string) => {
+//   return objectData.map((data: any) => {
+//     const newData = { ...data };
+//     delete newData[key];
+//     return newData;
+//   });
+// };

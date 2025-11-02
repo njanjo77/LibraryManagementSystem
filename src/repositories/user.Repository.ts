@@ -114,7 +114,7 @@ export const getUserById = async (user_id: number): Promise<User | null> => {
   }
 };
 
-export const insertUser = async (user: newUser): Promise<void> => {
+export const insertUser = async (user: newUser): Promise<User[] | null> => {
   try {
     const pool = await getPool();
     
@@ -130,6 +130,7 @@ export const insertUser = async (user: newUser): Promise<void> => {
         VALUES (@username, @email, @password, @role, @date)
       `);
      const newUser=await pool.request().input("email",user.email).query("SELECT * FROM Users WHERE email=@email ")
+  
      return newUser.recordset[0]
   } catch (error) {
     console.error("Failed to insert user:", error);

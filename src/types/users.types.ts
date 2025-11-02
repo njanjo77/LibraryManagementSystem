@@ -15,6 +15,7 @@ export interface newUser{
     password:string,
     role:'Admin' | 'Member',
     created_at?:Date,
+    password_hash?:string
 }
 
 export interface updateUser{
