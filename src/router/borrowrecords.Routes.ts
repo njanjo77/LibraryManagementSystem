@@ -1,18 +1,14 @@
+import { Router } from "express";
+import * as borrowController from "../controllers/borrowrecords.Controllers"
+import { isAuthenticated } from "../Middlewares/bearAuth";
+import { authorize } from "../Middlewares/roleAuth";
 
-import { Express } from 'express';
-import * as BorrowRecordController from '../controllers/borrowrecords.Controllers';
-
-const borrowRouter = (app: Express) => {;
-
-app.get('/borrowrecords', BorrowRecordController.getAllBorrowRecords);
-app.get('/borrowrecords/:borrow_id', BorrowRecordController.getBorrowRecordById);
-app.post('/borrowrecords/create', BorrowRecordController.createBorrowRecord);
-app.put('/borrowrecords/update/:borrow_id', BorrowRecordController.updateBorrowRecord)
-app.patch('/borrowrecords/clear/:borrow_id', BorrowRecordController.clearBorrowRecord)
-app.delete('/borrowrecords/delete/:borrow_id', BorrowRecordController.deleteBorrowRecord)
-};
-
-
-
+const borrowRouter = Router(); 
+borrowRouter.get("/borrow-records", isAuthenticated,authorize,borrowController.getAllBorrowRecords);
+borrowRouter.get("/borrow-records/:borrow_id", isAuthenticated,borrowController.getBorrowRecordById);
+borrowRouter.post("/borrow-records/create", isAuthenticated,authorize,borrowController.createBorrowRecord);
+borrowRouter.put("/borrow-records/update/:borrow_id", isAuthenticated,authorize,borrowController.updateBorrowRecord);
+borrowRouter.patch("/borrow-records/clear/:borrow_id", isAuthenticated,authorize,borrowController.clearBorrowRecord);
+borrowRouter.delete("/borrow-records/delete/:borrow_id", isAuthenticated,authorize,borrowController.deleteBorrowRecord);
 
 export default borrowRouter;

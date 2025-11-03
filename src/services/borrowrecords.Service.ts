@@ -16,7 +16,7 @@ export const createBorrowRecord = async (record: newBorrowRecord) =>{
     if(!record.user_id || !record.book_id){
         throw new Error("Borrow ID is required for update");
     }
-   return await borrowRecordsRepository.createBorrowRecord(record)
+   return await borrowRecordsRepository.insertBorrowRecord(record)
 };
 
 export const updateBorrowRecordService = async (record: updateBorrow): Promise<void> => {
