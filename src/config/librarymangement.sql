@@ -4,7 +4,7 @@ CREATE DATABASE LibraryManagement;
  --store user information as per their respective roles, either member(the student/staff) or admin(the librarian)
  CREATE TABLE Users (
     user_id INT IDENTITY(1,1) PRIMARY KEY,
-    username NVARCHAR(50) NOT NULL UNIQUE,
+    username NVARCHAR(50) NOT NULL,
     email NVARCHAR(100) NOT NULL UNIQUE,
     password_hash NVARCHAR(255) NOT NULL, -- Store hashed passwords (e.g., bcrypt output)
     role NVARCHAR(20) NOT NULL CHECK (role IN ('Admin', 'Member')),
