@@ -1,18 +1,19 @@
-import { BorrowRecord, NewBorrowRecord, UpdateBorrowRecord, ClearBorrowRecord } from "../types/borrowrecords.Interface"
-import { getPool } from "../config/database";
-import dotenv from 'dotenv'
-dotenv.config()
+
+import { getPool } from '../config/database';
+import dotenv from 'dotenv';
+import { borrowrecords, clearBorrow, getBorrowById, newBorrowRecord, updateBorrow, } from '../types/borrowrecords.Interface';
+dotenv.config();
 
 
 //getall Borrowrecords
-export const getAllBorrowRecords = async (): Promise<BorrowRecord[]> => {
+export const getAllBorrowRecords = async (): Promise<borrowrecords[]> => {
   const pool = await getPool();
   const result = await pool.request().query("SELECT * FROM BorrowRecords");
   return result.recordset;
 };
 
 //get borrow records by id
-export const getBorrowRecordById = async (borrow_id: number): Promise<BorrowRecord | null> => {
+export const getBorrowRecordById = async (borrow_id: number): Promise<borrowrecords | null> => {
   const pool = await getPool();
   const result = await pool.request()
     .input("borrow_id", borrow_id)
@@ -22,7 +23,7 @@ export const getBorrowRecordById = async (borrow_id: number): Promise<BorrowReco
 
 
 //inserting a new record
-export const insertBorrowRecord = async (record: NewBorrowRecord): Promise<void> => {
+export const insertBorrowRecord = async (record: newBorrowRecord): Promise<void> => {
   const pool = await getPool();
   await pool.request()
     .input("user_id", record.user_id)
@@ -38,7 +39,7 @@ export const insertBorrowRecord = async (record: NewBorrowRecord): Promise<void>
 
 
 //updating existing record
-export const updateBorrowRecord = async (record: UpdateBorrowRecord): Promise<void> => {
+export const updateBorrowRecord = async (record: updateBorrow): Promise<void> => {
   const pool = await getPool();
   await pool.request()
     .input("borrow_id", record.borrow_id)
@@ -55,7 +56,7 @@ export const updateBorrowRecord = async (record: UpdateBorrowRecord): Promise<vo
 };
 
 //clear borrow record
-export const clearBorrowRecord = async (record: ClearBorrowRecord): Promise<void> => {
+export const clearBorrowRecord = async (record: clearBorrow): Promise<void> => {
   const pool = await getPool();
   await pool.request()
     .input("borrow_id", record.borrow_id)
@@ -73,9 +74,8 @@ export const clearBorrowRecord = async (record: ClearBorrowRecord): Promise<void
 
 //delete Borrow record
 export const deleteBorrowRecord = async (borrow_id: number): Promise<void> => {
-  const pool = await getPool();
-  await pool.request()
+    const pool = await getPool();
+    await pool.request()
     .input("borrow_id", borrow_id)
-    .query("DELETE FROM BorrowRecords WHERE borrow_id = @borrow_id");
+    .query("DELETE * FROM BorrowRecords WHERE borrow_id = @borrow_id");
 };
-
